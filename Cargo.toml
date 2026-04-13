@@ -1,0 +1,10 @@
+[package]
+name = "root_tree_and_internal_labels"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "4.6.0", features = ["derive"] }
+memory-stats = "1.2.0"
+phylo = { git = "https://github.com/acg-team/rust-phylo", branch = "develop" }
+anyhow = "1.0.86"
