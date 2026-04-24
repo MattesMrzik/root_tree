@@ -52,20 +52,18 @@ fn avoid_zero_blen_after_root(tree: &Tree) -> Result<Tree> {
     Ok(tree_with_non_zero_blen_after_root)
 }
 
-fn write_newick_with_and_without_brackets(tree: &Tree) -> Result<()> {
+fn write_newick_with_and_without_brackets(tree: &Tree, args: &Args) -> Result<()> {
     let newick = tree.to_newick();
     // if there is a ) at the second last position, remove it and also the first char if its a (
     if newick.ends_with(");") {
-        std::fs::write("output_with_brackets.newick", &newick)
-            .context("Unable to write Newick tree to output file")?;
+        std::fs::write(&args.ow, &newick).context("Unable to write Newick tree to output file")?;
         let newick_wo = newick[1..newick.len() - 2].to_string() + ";";
-        std::fs::write("output_without_brackets.newick", &newick_wo)
+        std::fs::write(&args.owo, &newick_wo)
             .context("Unable to write Newick tree to output file")?;
     } else {
-        std::fs::write("output_without_brackets.newick", &newick)
-            .context("Unable to write Newick tree to output file")?;
+        std::fs::write(&args.owo, &newick).context("Unable to write Newick tree to output file")?;
         let newick_with_brackets = format!("({});", &newick[..newick.len() - 1]);
-        std::fs::write("output_with_brackets.newick", &newick_with_brackets)
+        std::fs::write(&args.ow, &newick_with_brackets)
             .context("Unable to write Newick tree to output file")?;
     };
     Ok(())
@@ -83,6 +81,6 @@ fn main() -> Result<()> {
     // If there are zero branch lengths after the root, they are set to half of the sibling branch length
     let tree = avoid_zero_blen_after_root(&tree)?;
     // The tree is written to two files, one with brackets around the whole tree and one without
-    write_newick_with_and_without_brackets(&tree)?;
+    write_newick_with_and_without_brackets(&tree, &args)?;
     Ok(())
 }
