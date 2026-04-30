@@ -8,8 +8,5 @@ pub struct Args {
     pub i: PathBuf,
 
     #[arg(long)]
-    pub ow: PathBuf,
-
-    #[arg(long)]
-    pub owo: PathBuf,
+    pub o: PathBuf,
 }
